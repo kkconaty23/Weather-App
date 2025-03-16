@@ -20,18 +20,28 @@ public record WeatherApp() {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        String csvPath = "resources/weatherdata.csv";
-        String csvData;
-        try (InputStream is = WeatherApp.class.getClassLoader().getResourceAsStream(csvPath)) {
-            if (is == null) {
-                System.err.println("CSV file not found at: " + csvPath);
-                return;
+            String csvPath = "weatherdata.csv";  // No leading slash
+            String csvData = null;  // Declare outside try block
+
+            try (InputStream is = WeatherApp.class.getClassLoader().getResourceAsStream(csvPath)) {
+                if (is == null) {
+                    System.err.println("CSV file not found at: " + csvPath);
+                    return;
+                }
+                csvData = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+                System.out.println("CSV Data Loaded Successfully!");
+            } catch (IOException e) {
+                System.err.println("Error reading CSV file: " + e.getMessage());
+                return; // Exit if there's an error
             }
-            csvData = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            System.err.println("Error reading CSV file: " + e.getMessage());
-            return;
-        }
+
+            // Ensure csvData is not null before using it
+            if (csvData != null) {
+                var weatherData = WeatherDataAnalyzer.parseCSV(csvData);
+            } else {
+                System.err.println("CSV data is empty.");
+            }
+
 
 
         var weatherData = WeatherDataAnalyzer.parseCSV(csvData);

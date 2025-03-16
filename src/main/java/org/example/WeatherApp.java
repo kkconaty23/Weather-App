@@ -20,7 +20,7 @@ public record WeatherApp() {
      * @param args command-line arguments (not used)
      */
     public static void main(String[] args) {
-        String csvPath = "/weatherdata.csv";
+        String csvPath = "resources/weatherdata.csv";
         String csvData;
         try (InputStream is = WeatherApp.class.getClassLoader().getResourceAsStream(csvPath)) {
             if (is == null) {
